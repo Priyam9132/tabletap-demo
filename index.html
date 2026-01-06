@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TableTap QR Menu</title>
+  <title>TableTap Menu</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -22,13 +22,16 @@
     <button onclick="openModal('Virgin Mojito',120)">Add</button>
   </div>
 
-  <!-- Add more items like above -->
+  <div class="item">
+    <img src="./blue-lagoon.jpg" alt="Blue Lagoon">
+    <div class="item-info">Blue Lagoon – ₹150</div>
+    <button onclick="openModal('Blue Lagoon',150)">Add</button>
+  </div>
 </div>
 
 <!-- CART BUTTON -->
 <div class="cart-btn" id="cartBtn">
-  🛒 Cart
-  <div class="cart-badge" id="cartBadge">0</div>
+  🛒 Cart <span id="cartBadge">0</span>
 </div>
 
 <!-- MODAL -->
@@ -37,7 +40,7 @@
     <h3 id="modalName"></h3>
 
     <div class="qty-box">
-      <button onclick="changeQty(-1)" id="minusBtn">🗑️</button>
+      <button onclick="changeQty(-1)">🗑️</button>
       <span id="qty">1</span>
       <button onclick="changeQty(1)">+</button>
     </div>
