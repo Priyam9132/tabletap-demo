@@ -8,7 +8,7 @@ function openModal(name, price){
   document.getElementById("price").innerText = price;
   document.getElementById("paymentMethod").value = "reception";
   document.getElementById("note").value = "";
-  document.getElementById("modal").style.display = "block";
+  document.getElementById("modal").style.display = "flex";
 }
 
 function closeModal(){
@@ -55,25 +55,20 @@ document.getElementById("cartBtn").onclick = ()=>{
 function placeOrder(){
   if(cart.length === 0) return;
 
-  // Split items by payment type
   const receptionItems = cart.filter(i => i.payment === "reception");
   const upiItems = cart.filter(i => i.payment === "upi");
 
-  // WhatsApp for reception
   if(receptionItems.length) sendWhatsApp(receptionItems);
-
-  // UPI for Pay Now
   if(upiItems.length) payUPI(upiItems);
 
-  alert("Orders processed!");
+  alert("Order sent!");
   cart = [];
   updateCart();
   document.getElementById("cart").style.display = "none";
 }
 
-// WhatsApp message
 function sendWhatsApp(items){
-  const phone = "91XXXXXXXXXX"; // Replace manager number
+  const phone = "91XXXXXXXXXX"; // Manager WhatsApp number
   let message = "New Order 🍽️\nPayment: Pay at Reception\n\n";
 
   items.forEach(i=>{
@@ -87,7 +82,6 @@ function sendWhatsApp(items){
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, "_blank");
 }
 
-// UPI Payment
 function payUPI(items){
   const upiId = "cafe@upi"; // Replace with café UPI ID
   const name = "Cafe Name";
