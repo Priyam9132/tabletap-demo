@@ -3,71 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TableTap Menu</title>
-  <link rel="stylesheet" href="./style.css">
+  <title>TableTap Demo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>TableTap Demo</h1>
+    <p>QR Menu demo for cafes</p>
+  </header>
 
-<header>
-  Café Aroma ☕
-  <small>Scan • Order • Relax</small>
-</header>
+  <main>
+    <section class="menu">
+      <div class="item">
+        <img src="virgin-mojito.jpg" alt="Virgin Mojito">
+        <h2>Virgin Mojito</h2>
+        <p>₹150</p>
+        <button class="order-btn">Place Order</button>
+      </div>
+    </section>
 
-<div class="category">
-  <h3>🍹 Mocktails</h3>
+    <section id="payment-section" class="hidden">
+      <h2>Select Payment</h2>
+      <button class="pay-option" data-method="reception">Pay at Reception</button>
+      <button class="pay-option" data-method="online">Pay Now</button>
+      <div id="online-options" class="hidden">
+        <button class="online-pay">PhonePe</button>
+        <button class="online-pay">Paytm</button>
+        <button class="online-pay">Google Pay</button>
+      </div>
+    </section>
+  </main>
 
-  <div class="item">
-    <img src="./virgin-mojito.jpg" alt="Virgin Mojito">
-    <div class="item-info">Virgin Mojito – ₹120</div>
-    <button onclick="openModal('Virgin Mojito',120)">Add</button>
-  </div>
-
-  <div class="item">
-    <img src="./blue-lagoon.jpg" alt="Blue Lagoon">
-    <div class="item-info">Blue Lagoon – ₹150</div>
-    <button onclick="openModal('Blue Lagoon',150)">Add</button>
-  </div>
-</div>
-
-<!-- CART BUTTON -->
-<div class="cart-btn" id="cartBtn">
-  🛒 Cart <span id="cartBadge">0</span>
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3 id="modalName"></h3>
-
-    <div class="qty-box">
-      <button onclick="changeQty(-1)">🗑️</button>
-      <span id="qty">1</span>
-      <button onclick="changeQty(1)">+</button>
-    </div>
-
-    <p>Price: ₹<span id="price"></span></p>
-
-    <textarea id="note" placeholder="Any suggestion..."></textarea>
-
-    <h4>Select Payment</h4>
-    <select id="paymentMethod">
-      <option value="reception">Pay at Reception</option>
-      <option value="upi">Pay Now (UPI)</option>
-    </select>
-
-    <button onclick="addToCart()">Add to Cart</button>
-    <button onclick="closeModal()">Cancel</button>
-  </div>
-</div>
-
-<!-- CART -->
-<div class="cart" id="cart">
-  <h3>Your Cart</h3>
-  <div id="cartItems"></div>
-  <p class="total">Total: ₹<span id="total">0</span></p>
-  <button onclick="placeOrder()">Place Order</button>
-</div>
-
-<script src="./main.js"></script>
+  <script src="main.js" defer></script>
 </body>
 </html>
