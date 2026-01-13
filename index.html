@@ -1,39 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TableTap Demo</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Aroma | Digital Menu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f7efe5;
+  --card:#ffffff;
+  --text:#222;
+  --muted:#777;
+  --primary:#6f4e37;
+}
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#f1f1f1;
+  --muted:#aaa;
+  --primary:#caa472;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
+}
+
+/* HEADER */
+header{
+  background:url("https://images.unsplash.com/photo-1495474472287-4d71bcdd2085") center/cover no-repeat;
+  padding:70px 20px 110px;
+  text-align:center;
+  color:#fff;
+  position:relative;
+}
+header::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+}
+body.dark header::after{background:rgba(0,0,0,.8)}
+header .content{position:relative;z-index:1}
+
+/* DARK TOGGLE */
+.dark-toggle{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  font-size:18px;
+  background:var(--card);
+  color:var(--text);
+  z-index:2;
+}
+
+/* NAV */
+.nav{
+  position:sticky;
+  top:0;
+  background:var(--card);
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  padding:10px;
+  z-index:10;
+}
+.nav button{
+  border:none;
+  background:none;
+  padding:6px 16px;
+  border-radius:20px;
+  cursor:pointer;
+  color:var(--text);
+}
+.nav button.active{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* MENU */
+.menu{max-width:900px;margin:20px auto;padding:0 16px}
+.section{
+  background:var(--card);
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:24px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.item{
+  display:flex;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px dashed var(--muted);
+}
+.item:last-child{border-bottom:none}
+.item img{
+  width:80px;height:80px;min-width:80px;
+  object-fit:cover;border-radius:10px;
+}
+.info{flex:1}
+.desc{font-size:13px;color:var(--muted)}
+.price{color:#2e7d32;font-weight:600}
+.add{
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  padding:6px 14px;
+  border-radius:16px;
+}
+
+/* CART */
+.cart-btn{
+  position:fixed;bottom:90px;right:20px;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--primary);color:#fff;
+  border:none;font-size:22px;z-index:1000;
+}
+.cart-count{
+  position:absolute;top:-6px;right:-6px;
+  width:20px;height:20px;border-radius:50%;
+  background:red;color:#fff;font-size:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:none;z-index:1099;
+}
+.backdrop.show{display:block}
+.cart{
+  position:fixed;left:0;right:0;bottom:0;
+  background:var(--card);
+  border-radius:20px 20px 0 0;
+  padding:20px;
+  transform:translateY(100%);
+  transition:.3s;
+  z-index:1100;
+}
+.cart.show{transform:translateY(0)}
+.cart-header{display:flex;justify-content:space-between}
+.cart-item{display:flex;justify-content:space-between;margin:12px 0}
+.qty{display:flex;gap:8px;align-items:center}
+.qty button{
+  width:26px;height:26px;border-radius:50%;
+  border:none;background:var(--primary);color:#fff
+}
+.whatsapp{
+  width:100%;margin-top:12px;padding:12px;
+  background:#25D366;color:#fff;
+  border:none;border-radius:12px;
+}
+.order-id{font-size:13px;color:var(--muted)}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>TableTap Demo</h1>
-    <p>QR Menu demo for cafes</p>
-  </header>
 
-  <main>
-    <section class="menu">
-      <div class="item">
-        <img src="virgin-mojito.jpg" alt="Virgin Mojito">
-        <h2>Virgin Mojito</h2>
-        <p>₹150</p>
-        <button class="order-btn">Place Order</button>
-      </div>
-    </section>
+<header>
+  <button class="dark-toggle" id="darkBtn">🌙</button>
+  <div class="content">
+    <h1>☕ Cafe Aroma</h1>
+    <p>Freshly Brewed Happiness</p>
+  </div>
+</header>
 
-    <section id="payment-section" class="hidden">
-      <h2>Select Payment</h2>
-      <button class="pay-option" data-method="reception">Pay at Reception</button>
-      <button class="pay-option" data-method="online">Pay Now</button>
-      <div id="online-options" class="hidden">
-        <button class="online-pay">PhonePe</button>
-        <button class="online-pay">Paytm</button>
-        <button class="online-pay">Google Pay</button>
-      </div>
-    </section>
-  </main>
+<div class="nav">
+  <button class="active" data-target="coffee">Coffee</button>
+  <button data-target="cold">Cold</button>
+  <button data-target="snacks">Snacks</button>
+</div>
 
-  <script src="main.js" defer></script>
+<div class="menu">
+
+<!-- COFFEE -->
+<div class="section" id="coffee">
+<h2>Coffee</h2>
+<div class="item"><img src="espresso.png"><div class="info"><b>Espresso</b><div class="desc">Strong & rich</div></div><div><div class="price">₹120</div><button class="add" onclick="addItem('Espresso')">+ Add</button></div></div>
+<div class="item"><img src="cappuccino.png"><div class="info"><b>Cappuccino</b><div class="desc">Milk foam</div></div><div><div class="price">₹160</div><button class="add" onclick="addItem('Cappuccino')">+ Add</button></div></div>
+<div class="item"><img src="latte.png"><div class="info"><b>Cafe Latte</b><div class="desc">Smooth & creamy</div></div><div><div class="price">₹170</div><button class="add" onclick="addItem('Cafe Latte')">+ Add</button></div></div>
+</div>
+
+<!-- COLD -->
+<div class="section" id="cold">
+<h2>Cold</h2>
+<div class="item"><img src="cold-coffee.png"><div class="info"><b>Cold Coffee</b><div class="desc">Chilled</div></div><div><div class="price">₹150</div><button class="add" onclick="addItem('Cold Coffee')">+ Add</button></div></div>
+<div class="item"><img src="iced-latte.png"><div class="info"><b>Iced Latte</b><div class="desc">Milk & ice</div></div><div><div class="price">₹180</div><button class="add" onclick="addItem('Iced Latte')">+ Add</button></div></div>
+</div>
+
+<!-- SNACKS -->
+<div class="section" id="snacks">
+<h2>Snacks</h2>
+<div class="item"><img src="sandwich.png"><div class="info"><b>Veg Sandwich</b><div class="desc">Fresh veggies</div></div><div><div class="price">₹140</div><button class="add" onclick="addItem('Veg Sandwich')">+ Add</button></div></div>
+<div class="item"><img src="cheese-fries.png"><div class="info"><b>Cheese Fries</b><div class="desc">Loaded fries</div></div><div><div class="price">₹160</div><button class="add" onclick="addItem('Cheese Fries')">+ Add</button></div></div>
+</div>
+
+</div>
+
+<button class="cart-btn" id="cartBtn" onclick="openCart()">🛒
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<div class="backdrop" id="backdrop" onclick="closeCart()"></div>
+
+<div class="cart" id="cart">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button onclick="closeCart()">✕</button>
+  </div>
+  <div id="cartItems"></div>
+  <div id="total"></div>
+  <div class="order-id" id="tableInfo"></div>
+  <div class="order-id" id="orderId"></div>
+  <button class="whatsapp" onclick="orderWhatsApp()">Order on WhatsApp</button>
+</div>
+
+<script>
+/* ===== DOM ===== */
+const cart=document.getElementById("cart");
+const backdrop=document.getElementById("backdrop");
+const cartBtn=document.getElementById("cartBtn");
+const cartItems=document.getElementById("cartItems");
+const totalEl=document.getElementById("total");
+const cartCount=document.getElementById("cartCount");
+const tableInfo=document.getElementById("tableInfo");
+const orderIdEl=document.getElementById("orderId");
+const darkBtn=document.getElementById("darkBtn");
+
+/* ===== TABLE ===== */
+const params=new URLSearchParams(location.search);
+const tableNo=params.get("table")||"—";
+const tableRef=`T${tableNo}-${Math.random().toString(36).slice(2,5).toUpperCase()}`;
+tableInfo.textContent=`Table No: ${tableNo} | Ref: ${tableRef}`;
+
+/* ===== DARK MODE ===== */
+function setDark(v){
+  document.body.classList.toggle("dark",v);
+  darkBtn.textContent=v?"☀️":"🌙";
+  localStorage.setItem("dark",v);
+}
+darkBtn.onclick=()=>setDark(!document.body.classList.contains("dark"));
+if(localStorage.getItem("dark")==="true") setDark(true);
+
+/* ===== CART ===== */
+const MENU={
+  "Espresso":120,"Cappuccino":160,"Cafe Latte":170,
+  "Cold Coffee":150,"Iced Latte":180,
+  "Veg Sandwich":140,"Cheese Fries":160
+};
+let cartData={};
+
+function addItem(n){
+  cartData[n]?cartData[n].qty++:cartData[n]={qty:1};
+  renderCart();
+}
+function changeQty(n,d){
+  cartData[n].qty+=d;
+  if(cartData[n].qty<=0) delete cartData[n];
+  renderCart();
+}
+function renderCart(){
+  let t=0,c=0;
+  cartItems.innerHTML="";
+  for(let n in cartData){
+    t+=MENU[n]*cartData[n].qty;
+    c+=cartData[n].qty;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        <div>${n} × ${cartData[n].qty}</div>
+        <div class="qty">
+          <button onclick="changeQty('${n}',-1)">−</button>
+          <button onclick="changeQty('${n}',1)">+</button>
+        </div>
+      </div>`;
+  }
+  totalEl.textContent="Total: ₹"+t;
+  cartCount.textContent=c;
+}
+
+/* CART OPEN/CLOSE */
+function openCart(){
+  cart.classList.add("show");
+  backdrop.classList.add("show");
+  cartBtn.style.display="none";
+}
+function closeCart(){
+  cart.classList.remove("show");
+  backdrop.classList.remove("show");
+  cartBtn.style.display="block";
+}
+
+/* WHATSAPP */
+let orderId="CA"+Date.now().toString().slice(-6);
+orderIdEl.textContent="Order ID: "+orderId;
+function orderWhatsApp(){
+  if(!Object.keys(cartData).length){alert("Cart empty");return;}
+  let msg=`Order ID: ${orderId}\nTable No: ${tableNo}\nRef: ${tableRef}\n`;
+  let t=0;
+  for(let n in cartData){
+    msg+=`${n} x ${cartData[n].qty}\n`;
+    t+=MENU[n]*cartData[n].qty;
+  }
+  msg+=`Total: ₹${t}`;
+  window.open("https://wa.me/8619175141?text="+encodeURIComponent(msg),"_blank");
+}
+
+/* ===== ACTIVE NAV (CLICK PRIORITY – FINAL) ===== */
+const navButtons=[...document.querySelectorAll(".nav button")];
+const sections=[...document.querySelectorAll(".section")];
+const navHeight=document.querySelector(".nav").offsetHeight;
+
+let clickLock=false;
+
+/* CLICK */
+navButtons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const target=document.getElementById(btn.dataset.target);
+
+    clickLock=true;
+
+    navButtons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+
+    window.scrollTo({
+      top:target.offsetTop-navHeight,
+      behavior:"smooth"
+    });
+
+    setTimeout(()=>clickLock=false,700);
+  });
+});
+
+/* SCROLL */
+window.addEventListener("scroll",()=>{
+  if(clickLock) return;
+
+  let current=null;
+  sections.forEach(sec=>{
+    const top=sec.offsetTop-navHeight-5;
+    const bottom=top+sec.offsetHeight;
+    if(window.scrollY>=top && window.scrollY<bottom){
+      current=sec.id;
+    }
+  });
+
+  if(current){
+    navButtons.forEach(btn=>{
+      btn.classList.toggle("active",btn.dataset.target===current);
+    });
+  }
+});
+</script>
+
 </body>
 </html>
